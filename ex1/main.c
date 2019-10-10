@@ -3,8 +3,6 @@
 
 int main(void)
 {
-	/*int a;
-	int b;*/
 	int a, b;
 	printf("Enter a ");
 	scanf ("%d", &a);
