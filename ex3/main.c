@@ -26,6 +26,7 @@ int main(void)
 		if (str1[i] != str2[i])
 		{
 			flag = YES;
+			break;
 		}
 		i++;
 	} while (str1[i] != '\0' && str2[i] != '\0');
@@ -38,6 +39,6 @@ int main(void)
 	{
 		printf("str1 <> str2");
 	}
-	
+
 	return 0;
 }
