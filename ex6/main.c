@@ -1,4 +1,3 @@
-#pragma warning(disable : 4996) //необходимо для использования устаревших функций (scanf)
 #include <stdio.h>
 
 #define MAXLINE 1000
@@ -8,7 +7,7 @@ int main(void)
 	char line[MAXLINE];
 	gets(line);
 	char* tek = line;
-	char *sled = line;
+	char* sled = line;
 	int cnt = 0;
 	sled++;
 	do
@@ -23,5 +22,5 @@ int main(void)
 		tek++;
 		sled++;
 	} while (*tek != '\0');
-	printf ("%d", cnt);
+	printf("%d", cnt);
 }
