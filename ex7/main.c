@@ -1,4 +1,3 @@
-//#pragma warning(disable : 4996) //необходимо для использования устаревших функций (scanf)
 #include <stdio.h>
 
 /* определение символических констант*/
@@ -40,7 +39,7 @@ int main(void)
 			*out_ptr++ = *in_ptr;
 		}
 	} while (in_ptr++ - first_ptr != K);
-	
+
 	printf("original data:\n");
 	for (in_ptr = line; in_ptr - first_ptr != K; in_ptr++)
 	{
@@ -83,7 +82,7 @@ int main(void)
 			*out_ptr++ = *w2++;
 			*out_ptr++ = *w1++;
 
-		} while (in_ptr - first_ptr < K-1);
+		} while (in_ptr - first_ptr < K - 1);
 		*out_ptr = *in_ptr;
 	}
 
