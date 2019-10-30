@@ -11,8 +11,6 @@ int main(void)
 	char str2[MAXLINE];
 
 	int i = 0;
-	int s1 = 0;
-	int s2 = 0;
 
 	int flag = NO;
 
