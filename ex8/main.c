@@ -13,18 +13,26 @@ int main(void)
 
 	int line[MAXLINE];
 	int result[MAXLINE];
+	char tekst[MAXLINE];
 
+
+	char* tek_ptr = tekst;
 	int* first_ptr = line;
 	int* in_ptr = line;
 	int* out_ptr = result;
 	int* output_ptr = result;
 
-	int m = 0;
+	int symb_cnt;
+	int number = 0;
 
-	FILE* fpout; // указатели на структуру типа FILE для выходного файла
+	FILE* fpin = fopen ("C:\\Users\\User\\source\\repos\\file.txt", "rt"); // открыть файл для чтения
+	FILE* fpout = fopen ("C:\\Users\\User\\source\\repos\\result.txt", "wt"); // открыть файл для записи
 
-	
-	fpout = fopen("C:\\Users\\User\\source\\repos\\result.txt", "wt"); // открыть файл для записи
+	if (fpin == NULL)
+	{
+		printf("error opening file input\n"); // информация об ошибке
+		return; // ошибка при открытии файла
+	}
 
 	if (fpout == NULL)
 	{
@@ -54,14 +62,16 @@ int main(void)
 	printf("original data:\n");
 	for (in_ptr = line; in_ptr - first_ptr != K; in_ptr++)
 	{
-		printf("%4d ", *in_ptr);
+		printf("%2d ", *in_ptr);
 	}
 
 	printf("\noriginal data with zero:\n");
-	for (out_ptr = result; out_ptr - output_ptr != K; out_ptr++)
+	for (number = 1, out_ptr = result; out_ptr - output_ptr != K; out_ptr++, number++)
 	{
-		printf("%4d ", *out_ptr);
+		printf("%3d: %3d\n", number, *out_ptr);
 	}
+
+	number = 0;
 
 	for (in_ptr = line, out_ptr = result; in_ptr - first_ptr != K;)
 	{
@@ -71,20 +81,35 @@ int main(void)
 	in_ptr = line;
 	out_ptr = result;
 
-	do
+	//fprintf(fpout, "     12345678901234567890\n"); // линейка
+
+	while (!feof(fpin))// цикл до конца файла
 	{
-		while (*in_ptr != m)
+		tek_ptr = fgets (tekst, MAXLINE, fpin); // получакм новую строку и ставим на нее указатель
+
+		if (tek_ptr == NULL || number == K)
 		{
-			*out_ptr = *in_ptr;
-			fprintf (fpout, "%d", *out_ptr++);
-			m++;
+			break; // файл исчерпан
 		}
-		fprintf (fpout, "\n");
-		m = 0;
-	} while (++in_ptr - first_ptr != K);
 
-	printf("\nK = %d", K);
+		number++;
 
+		fprintf(fpout, "%3d: ", number);
+		symb_cnt = 0;
+		while (*in_ptr != symb_cnt)
+		{
+			if (*tek_ptr == '\n' || *tek_ptr == '\0')
+			{
+				break;
+			}
+			fprintf(fpout, "%c", *tek_ptr++);
+			symb_cnt++;
+		}
+		fprintf(fpout, "\n");
+		in_ptr++;
+	}
+
+	fclose(fpin); // закрыть входной файл
 	fclose(fpout); // закрыть выходной файл
 
 	return 0;
