@@ -1,183 +1,144 @@
-#include<iostream>
-#include<locale.h>
-#include<stdlib.h>
-#include < string.h >
-#include<Windows.h>
-#include<wchar.h>
+#include <iostream>
 
-void show(int mode, int i);
 using namespace std;
-
-class Book
+class Book //описывает, то что мы можем выполнять с конкретными объектами
 {
-private: //
-	
-	char author[100];
-	char title[100];
-	char publishing[100];
-	int year;
-	int count_of_page;
+    private:
 
-public:
-	int sravi(int y)
-	{
-		if (year >= y)
-		{
-			return 0;
-		}
-		else
-		{
-			return 1;
-		}
-	}
+    string author;
+    string title;
+    string publishing;
+    int year;
+    int count_of_page;
 
-	int srpb(char s[])
-	{
-		if (strcmp(s, publishing) == 0)
-		{
-			return 0;
-		}
-		else
-		{
-			return 1;
-		}
-	}
+    public:
 
-	int srav(char s[])
-	{
-		if (strcmp(s, author) == 0)
-		{
-			return 0;
-		}
-		else
-		{
-			return 1;
-		}
-	}
-
-	void get(void)
-	{
-		cout << "Автор : " << author << endl;
-		cout << "Название книги : " << title << endl;
-		cout << "Издательство : " << publishing << endl;
-		cout << "Год : " << year << endl;
-		cout << "Количество страниц : " << count_of_page << endl;
-	}
-
-	void set(void)
-	{
-		cout << "Введите имя автора книги : " << endl;
-		cin.get();
-		cin.getline(author, 100);
-		cout << "Введите название книги : " << endl;
-		cin.getline(title, 100);
-		cout << "Введите назавние издательства : " << endl;
-		cin.getline(publishing, 100);
-		cout << "Введите год издания книги : " << endl;
-		cin >> year;
-		cout << "Введите количество страниц : " << endl;
-		cin >> count_of_page;
-	}
+    void set()
+    {
+        cout << "Введите  Автора" << endl;
+        cin >> author;
+        cout << "Введите Название" << endl;
+        cin >> title;
+        cout << "Введите Издательство" << endl;
+        cin >> publishing;
+        cout << "Введите год" << endl;
+        cin >> year;
+        cout << "Введите количество страниц" << endl;
+        cin >> count_of_page;
+    }
+    void show()
+    {
+        cout << "Автор: " << author << endl;
+        cout << "Название: " << title << endl;
+        cout << "Издательство: " << publishing << endl;
+        cout << "год: " << year << endl;
+        cout << "количество страниц: " << count_of_page << endl;
+    }
+    //несколько get чтобы, когда нам нужно вызвать одну переменную, мы не вызывали сразу все
+     string get_author()
+    {
+        return author;
+    }
+    string get_publishing()
+    {
+        return publishing;
+    }
+    int get_year()
+    {
+        return year;
+    }
 };
 
-class Book* library;
-
-int main(void)
+int main(int argc, const char* argv[])
 {
-	int ans, i = 0;
-	setlocale(LC_ALL, "Russian");
-	SetConsoleCP(1251);
-	SetConsoleOutputCP(1251);
+    setlocale(LC_ALL, "Russian");
 
-	do
-	{
-		cout << "Есть еще книги? (1)-да, (2)-нет,любая другая кнопка-выход из программы" << endl;
-		cin >> ans;
+    int menu_1 = 0;
+    int cnt = 0;
 
-		if (ans == 1)
-		{
-			library = (class Book*)realloc(library, (i + 1) * sizeof(class Book));
-			library[i].set();
-			i++;
-		}
+    class Book** Work;//объект
+    
+    Work = new Book * [1];
+    while (menu_1 != 2)
+    {
+        cout << "Меню:\n  1:Ввести еще одну книгу \n  2:Перейти в меню поиска" << endl;
+        cin >> menu_1;
 
-		else if (ans == 2)
-		{
-			int ans;
-			cout << "Выберите мод для вывода" << endl << "(1) - список книг данного автора" << endl;
-			cout << "(2) - список книг от данного издательства" << endl << "(3) - список книг написанных после данного года" << endl;
-			cout << "(4) - выход из программы" << endl;
-			cin >> ans;
+        switch (menu_1)
+        {
+        case 1:
 
-			if (ans >= 1 && ans <= 3)
-			{
-				show(ans, i);
-			}
-			else 
-			{ 
-				cout << "Выход из программы" << endl; break;
-			}
-		}
-		else
-		{
-			break;
-		}
-	} while (1);
-	free(library);
-	delete library;
-	return 0;
-}
+            Work[0] = new Book[cnt + 1];
+            for (int i = 0; i < cnt; i++)
+            {
+                Work[0][i] = Work[1][i];
+            }
+            Work[1] = new Book[cnt + 1];
 
-void show(int mode, int i)
-{
-	switch (mode)
-	{
-	case(1):
-	{
-		char name[100];
-		cout << "Введите имя писателя, которого хотите найти" << endl;
-		cin.get();
-		cin.getline(name, 100);
+            Work[0][cnt].set();
+            for (int i = 0; i < cnt + 1; i++)
+            {
+                Work[1][i] = Work[0][i];
+            }
 
-		for (int k = 0; k < i; k++)
-		{
-			if (library[k].srav(name) == 0)
-			{
-				library[k].get();
-			}
-		}
-		break;
-	}
-	case(2):
-	{
-		char name[100];
-		cout << "Введите название издательства, которого хотите найти" << endl;
-		cin.get();
-		cin.getline(name, 100);
+            cnt++;
+            break;
+        }
 
-		for (int k = 0; k < i; k++)
-		{
-			if (library[k].srpb(name) == 0)
-			{
-				library[k].get();
-			}
-		}
-		break;
-	}
-	case(3):
-	{
-		int a_year;
-		cout << "Введите искомый год" << endl;
-		cin >> a_year;
+    }
+ 
+    string zad_name;
+    string zad_izdat;
+    int menu_2 = 0;
+    int N;
+    while (menu_2 != 5)
+    {
+        cout << "Меню:\n    1:Поиск книг, заданного автора\n    2:Поиск книг, выпущенных заданным издательством\n    3:Поиск книг, выпущенных после заданного года\n    5:выход " << endl;
+        cin >> menu_2;
+        int cnt_1;
+        switch (menu_2) 
+        {
+        case 1:
+            cout << "Поиск книг, заданного автора\n" << "Введите автора" << endl;
+            cin >> zad_name;
+            for (int j = 0; j < cnt; j++)
+            {
+                if (zad_name == Work[0][j].get_author())
+                {
+                    Work[0][j].show();
+                    cout << endl;
+                }
+            }
+            break;
 
-		for (int k = 0; k < i; k++)
-		{
-			if (library[k].sravi(a_year) == 0)
-			{
-				library[k].get();
-			}
-		}
-		break;
-	}
-	}
+        case 2:
+            cout << "Поиск книг, заданного издательства\n" << "Введите издательство" << endl;
+            cin >> zad_izdat;
+            for (int j = 0; j < cnt; j++)
+            {
+                if (zad_izdat == Work[0][j].get_publishing())
+                {
+                    Work[0][j].show();
+                    cout << endl;
+                }
+            }
+            break;
+
+        case 3:
+            cout << "Поиск книг выпущенных после заданного года\n" << "Введите необходимый год" << endl;
+            cin >> N;
+            cout << "книги выпущенные после заданного года" << endl;
+            for (int j = 0; j < cnt; j++)
+            {
+                if (Work[0][j].get_year() > N)
+                {
+                    Work[0][j].show();
+                    cout << endl;
+                }
+            }
+            break;
+        }
+    }
+    cout << "конец программы" << endl;
+    return 0;
 }
