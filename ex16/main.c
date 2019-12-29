@@ -1,73 +1,77 @@
+#pragma warning(disable : 4996) //необходимо для использования устаревших функций
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//"/Users/my/Desktop/проекты языка си/16 Ява argv/16 Ява argv/Text"
-int main(int argc, const char * argv[]) 
+#include <locale.h>
+
+//C:\Users\User\source\repos\Project1\Debug\Project1.exe C : \Users\User\source\repos\Project1\ffile.txt, .
+
+int main(int argc, const char* argv[]) // обЪявляем аргументы командной строки
 {
-    printf("%i",argc);
-    for (int i = 0; i < argc; i++)
+    setlocale(LC_ALL, "Rus"); // русский язык
+
+    for (int i = 0; i < argc; i++) // выводим все входные данные
     {
         printf("%d. %s\n", i, argv[i]);
     }
 
     printf("\n\n\n\n");
-    if (argc<2)
+    if (argc < 2) // если в командной строке не было адреса файла (он второй, тк первый это адресс самой программы), то
     {
         printf("Введите первый аргументом адрес файла, а последующими разделители между словами в формате \"разделитель\"\n");
-        return 0;
+        return 0; // завершаем
     }
-    
-    printf("Выводим все введенные разделители\n");
 
-    for(int i=0;i<(argc-2);i++)
+    printf("Разделители\n");
+
+    for (int i = 0; i < (argc - 2); i++)
     {
-        printf("%s",argv[i+2]);
+        printf("%s", argv[i + 2]);
     }
 
     printf("\n");
-    FILE *txt;
-    txt=fopen(argv[1], "r");
 
-    if (txt==NULL)
+    FILE* txt = fopen(argv[1], "r"); // открываем текстовый файл
+
+    if (txt == NULL) // если его не было, то
     {
         printf("Ошибка открытия файла, возможно не введен адрес или введен не верно\n");
-        return 6;
+        return 0; // завершаем
     }
 
-    char sim;
-    int cnt=0;;
-    int separ=0;
- 
+    char sim; // текущий символ
+    int cnt = 0; // счетчик слов
+    int separ = 0; // флаг разделителя, изначально ноль, чтобы нумеровать первое слово
+
     do
     {
-        if(separ==0)
+        if (separ == 0) // если резделитель был найден, то
         {
-            printf("Слово №%i ",cnt);
-            separ=100;
+            printf("№%i ", cnt); // выводим номера слова
+            separ = 1; // опускаем флаг
         }
-        
-        sim=getc(txt);
-        for(int i=0;i<(argc-2);i++)
+
+        sim = getc(txt); // получаем новый символ
+        for (int i = 0; i < (argc - 2); i++) // сверяем его с разделителями
         {
-            (sim==argv[i+2][0])?(separ=0):(separ=1);
-            if(separ==0)
+            (sim == argv[i + 2][0]) ? (separ = 0) : (separ = 1); // совпало 0, не совпало 1
+            if (separ == 0) // если совпало, дальше не проверяем
             {
                 break;
             }
         }
 
-        if (separ != 0 && sim != '\n' && sim != ' ' && sim != '\xff')
+        if (separ != 0 && sim != '\n' && sim != ' ' && sim != EOF) // если это не разделитель, то выводим текущий символ
         {
             printf("%c", sim);
         }
-        
-        if(separ==0)
+
+        if (separ == 0) // если текущий символ разделитель...
         {
-             printf("\n");
-             cnt++;
+            printf("\n");
+            cnt++; // увеличиваем число слов
         }
-    }
-    while ((sim)!='\xff');
+    } while ((sim) != EOF); 
 
     printf("\n");
     return 0;
